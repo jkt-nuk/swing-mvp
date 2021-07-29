@@ -1,0 +1,65 @@
+onerror continue
+
+echo ************************************************
+echo ### NEWSUK EOMJSHELL SCRIPT  START ###
+echo ************************************************
+echo # Add commands
+
+cd admin/commands
+
+echo "Creating checkin_groovy"
+new checkin_groovy
+
+echo "checkin_groovy endpoint" 
+endpoint checkin_groovy "${HTTP_PROTO}://${SERVER_CORE}:${TOMCAT_CORE_PORT}/checkin/servlet/checkin?E-CouldFail=true;${HTTP_PROTO}://${SERVER_WORKER}:${TOMCAT_XTOOLS_PORT}/groovyengine/service/engine/scripts/execute?async=false&alias=exportOnSave"
+
+cd checkin_groovy
+descr . "Command to call checkin servlet and groovy servlet for compound Story"
+cd ../ 
+
+echo "Creating empty Script"
+new empty_script
+
+echo "empty command  endpoint"
+endpoint empty_script "/methode/methtim/scripts/commands/empty.bash"
+cd empty_script 
+descr . "Empty Script. This will be called by Send to Edition Builder and External Text Extract actions"
+
+
+cd /admin/types
+cd EOM::CompoundStory
+
+echo "Updating checkin action"
+action . -check_in
+action . +check_in =checkin_groovy -c =EOM::System;EOM::User
+
+
+echo "Creating new actions for exporting"
+
+echo "Creating new action Send_to_Edition_Builder"
+action . +Send_to_Edition_Builder =story2eb -c =EOM::System;EOM::User; -d ="Export to s3 for digital channel"
+echo "Created Send_to_Edition_Builder action"
+
+echo "Removing current action Send to Edition Builder"
+action -"Send to Edition Builder"
+
+echo "Creating new action Send_to_Edition_Builder"
+action . +"Send to Edition Builder" =empty_script -c =EOM::System;EOM::User; -d ="Old Export to s3 for digital channel"
+
+
+
+echo "Creating Send_to_Edition_Builder action"
+action . +External_Text_Extract =story2te -c =EOM::System;EOM::User; -d ="Export to s3 for print channel"
+
+echo "Removing current action External Text Extract"
+action -"External Text Extract"
+
+echo "Creating new action Send_to_Edition_Builder"
+action . +"External Text Extract" =empty_script -c =EOM::System;EOM::User; -d ="Old Export to s3 for print channel"
+
+
+echo **********************************************
+echo NEWSUK EOMJSHELL SCRIPT  - END
+echo **********************************************
+exit
+

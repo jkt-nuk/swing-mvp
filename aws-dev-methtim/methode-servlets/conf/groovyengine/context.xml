@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE config [
+	<!ENTITY % EOMVAR SYSTEM "../../../cfg/eomvar.dtd">
+	%EOMVAR;
+
+	<!-- Define servlet name -->
+	<!ENTITY SERVLET_NAME "groovyengine">
+	<!ENTITY SERVLET_USR "&METHUSR_groovyengine;">
+	<!ENTITY SERVLET_PWD "&METHPWD_groovyengine;">
+]>
+<config>
+	<!-- EOM AUTHENTICATION CONNECTION -->
+	<!-- Those connection parameters are used by the emWebAppTemplate to perform 
+		UI authentication; -->
+	<!-- This connection is not related to the functional configuration of the 
+		Application -->
+	<context-param>
+		<!-- The system eomdb session pool username -->
+		<param-name>loginName</param-name>
+		<param-value>&SERVLET_USR;</param-value>
+	</context-param>
+	<context-param>
+		<!-- The system eomdb session pool password -->
+		<param-name>loginPassword</param-name>
+		<param-value>&SERVLET_PWD;</param-value>
+	</context-param>
+	<context-param>
+		<!-- The system eomdb session pool nameservice -->
+		<param-name>nameService</param-name>
+                <param-value>corbaloc:&IIOP_PROTO;:1.2@&SERVER_NS;:&NS_PORT;/NameService</param-value>
+	</context-param>
+	<context-param>
+		<!-- The system eomdb session pool repository binding path -->
+		<param-name>repositoryBindingPath</param-name>
+		<param-value>EOM/Repositories/&REPOSITORY1;</param-value>
+	</context-param>
+	<context-param>
+		<!-- sessionParams - a sequence of up to 4 integers. The first integer 
+			specifies the minimum number of database sessions that, once created, will 
+			be permanently kept in a LIFO list. Note that permanent sessions incur the 
+			risk of becoming invalid (being reclaimed by the database for example), so 
+			it is better to set this value to zero. The second specifies the maximum 
+			number of database sessions that can be concurrently open. The sessions in 
+			the LIFO list following the permanent set will be closed after an idle timeout. 
+			A request coming when all the open sessions are busy will wait. The third 
+			number specifies the idle timeout for transient sessions, in seconds. The 
+			fourth number specifies the interval, in seconds, between two successive 
+			sessions cleaning runs. Default value: "0 5 300 15" -->
+		<param-name>SessionParameters</param-name>
+		<param-value>0 10 300 15</param-value>
+	</context-param>
+	<context-param>
+		<!-- a sequence of up to 4 integers. The first integer specifies the minimum 
+			number of orbs that, once created, will be permanently kept in a LIFO list. 
+			The second specifies the maximum number of orbs that can be concurrently 
+			open. The orbs in the LIFO list following the permanent set will be closed 
+			after an idle timeout. A request coming when all the open orbs are busy will 
+			receive an ORB already in use (chosen at random). The third number specifies 
+			the idle timeout for transient orbs, in seconds. The fourth number specifies 
+			the interval, in seconds, between two successive orbs cleaning runs. Default 
+			value: "0 10000 60 60" -->
+		<param-name>OrbPoolParameters</param-name>
+		<param-value>0 10000 60 60</param-value>
+	</context-param>
+
+	<!-- USER INTERFACE CONFIGURATION -->
+	<context-param>
+		<!-- If this is set to true, the GUI and the main services will require 
+			to be authenticated against the configured system eomdb -->
+        <param-name>Authentication</param-name>
+                <param-value>false</param-value>
+                </context-param>
+	<context-param>
+		<!-- If the authentication is true, this is a CSV list of principals (users/groups/etc) 
+			that are allowed to access -->
+		<param-name>Principals</param-name>
+		<param-value>Administrators</param-value>
+	</context-param>
+	<context-param>
+		<param-name>labelColor</param-name>
+		<!-- Color used for the display. Can be: -->
+		<!--  * HTML color: white                -->
+		<!--  * Hexadecimal color: #FFFFFF       -->
+		<param-value>&SERVLET_LABEL_COLOR;</param-value>
+	</context-param>
+	
+	<context-param>
+		<!-- If this is set to true, the emWebAppTemplate GUI for the XML configurations 
+			editor is enabled. Set to false to disable the web editing of the configuration 
+			files -->
+		<param-name>EnableConfigEditor</param-name>
+		<!-- Feature not managed in this servlet -->
+		<param-value>true</param-value>
+	</context-param>
+	<context-param>
+		<!-- If the authentication is true, this is a CSV list of principals (users/groups/etc) 
+			that are allowed to edit the configuration files -->
+		<param-name>AllowedConfigEditors</param-name>
+		<param-value></param-value>
+	</context-param>
+	<context-param>
+		<!-- If this is set to true, disable versioning for edited configuration file -->
+		<param-name>disableVersioning</param-name>
+		<param-value>false</param-value>
+	</context-param>
+	<context-param>
+		<!-- This value define the maximum number of versions of configuration 
+			files to be kept by the emWebAppTemplate when files are edited through UI -->
+		<param-name>MaxConfigVersions</param-name>
+		<param-value>10</param-value>
+	</context-param>
+
+	<!-- MEMORY, SESSION AND CACHING POLICIES -->
+	<context-param>
+		<!-- The Application identifies itself with an AppKey. For performance 
+			reasons it is recommended to turn this value to true unless the eomdb version 
+			states differently -->
+		<param-name>disableAppKey</param-name>
+		<param-value>true</param-value>
+	</context-param>
+
+	<!-- CONFIGURATION FILE PATH -->
+	<context-param>
+		<!-- The main functional configuration of the Application -->
+		<param-name>configPath</param-name>
+		<param-value>&HOME;/methode-servlets/conf/&SERVLET_NAME;/config.xml</param-value>
+	</context-param>
+	<context-param>
+		<!-- The path to the logback logging framework configuration -->
+		<param-name>logConfigPath</param-name>
+		<param-value>&HOME;/methode-servlets/conf/&SERVLET_NAME;/logback.xml</param-value>
+	</context-param>
+	<context-param>
+		<!-- The path where the servlet stores it's own logs -->
+		<param-name>logsFolderPath</param-name>
+		<param-value>&HOME;/logfiles/methode-servlets/&SERVLET_NAME;</param-value>
+	</context-param>
+
+	<!-- WORKING SYSTEM DIRECTORIES -->
+	<context-param>
+		<!-- The path where the emWebAppTemplate will store the configuration versions 
+			(when edited through the web GUI) -->
+		<param-name>dbPath</param-name>
+		<param-value>&SERVLETSMNTDIR;/&SERVLET_NAME;/db</param-value>
+	</context-param>
+	<context-param>
+		<!-- The time to wait, in ms, after to have shutdown the database -->
+		<param-name>dbShutDownDelay</param-name>
+		<param-value>2000</param-value>
+	</context-param>
+	<context-param>
+		<!-- Servlet work folder -->
+		<param-name>workFolderPath</param-name>
+		<param-value>&SERVLETSMNTDIR;/&SERVLET_NAME;/work</param-value>
+	</context-param>
+	
+</config>

@@ -1,0 +1,117 @@
+
+.qmItem textarea {
+	min-width: 120px;
+	width: calc(100% - 150px);
+}
+
+table {
+	border-spacing: 2px;
+}
+
+input[type=number] {
+	/*for absolutely positioning spinners*/
+	position: relative;
+
+}
+
+input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button
+	{
+	opacity: 1;
+}
+
+input[type=number]::-webkit-outer-spin-button, input[type=number]::-webkit-inner-spin-button
+	{
+	-webkit-appearance: inner-spin-button !important;
+	position: absolute;
+	top: 0;
+	right: 0;
+	height: 100%;
+}
+
+td, th {
+	padding: 1px;
+	height: 15px;
+	overflow:hidden;
+	
+}
+
+.col1 {
+	width: 18.33%;
+}
+
+.col {
+	width: 21%;
+	border: 0px;
+	background-color: lightgray;
+	"
+}
+
+.inline-block {
+	display: inline-block;
+}
+
+.ui-autocomplete {
+	max-height: 150px;
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
+.ui-menu .ui-menu-item a {
+	color: #4f90c8;
+}
+
+.publish-icons {
+	cursor: pointer;
+	vertical-align: middle;
+	font-size: 30px;
+}
+
+#publish {
+	/* width: 92%; */
+	width: 16em;
+	margin: 2px;
+}
+
+#publishContainer {
+	position: fixed;
+	bottom: 59px;
+}
+
+.second-add-on {
+	float: right;
+	padding: 6px;
+	background: #1a6fb7;
+	color: white;
+	text-align: center;
+	margin-right: 1px;
+	position: relative;
+	display: inline;
+	width: 30px;
+	height: 32px;
+	cursor: pointer;
+}
+
+.accordion-heading {
+	display: block;
+	margin-bottom: 10px;
+	color: black;
+	background-color: lightskyblue;
+}
+
+.emui-field-disabled {
+	opacity: 0.5;
+	pointer-events: none;
+}
+.friendlyUrllabel{
+	font-size: 12px; 
+}
+hr {  height:1px; background: rgb(70, 2, 2);
+	position: relative;
+	 }
+.nav-tabs.tab-sm>li>a{
+	font-size:16px;
+	}
+	.label, label,.form-control{
+		font-size:12px;
+
+	}

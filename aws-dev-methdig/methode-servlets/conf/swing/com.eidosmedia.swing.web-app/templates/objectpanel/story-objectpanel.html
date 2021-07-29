@@ -1,0 +1,442 @@
+<link rel="stylesheet" href="/swing/config/templates/objectpanel/utility-objectpanel.css">
+<script>
+	document.querySelectorAll("input").forEach(elem => elem.addEventListener('input', e => {
+		const el = e.target || e
+
+		if (el.type == "number" && el.max && el.min) {
+			let value = parseInt(el.value)
+			el.value = value // for 000 like input cleanup to 0
+			let max = parseInt(el.max)
+			let min = parseInt(el.min)
+			if (value > max) el.value = el.max
+			if (value < min) el.value = el.min
+		}
+	}));
+	$("#colorPicker").spectrum({
+        showPalette: true,
+        showPaletteOnly: true,
+        hideAfterPaletteSelect:true,
+        maxSelectionSize: 1,
+        preferredFormat: "hex",
+	palette: ['#0299A0', '#F3981D', '#EA5570', '#6E9D2E', '#6393CB', '#00A59A', '#BAA7A1','#E06618','#AC86AA']
+});
+</script>
+<div class="em-metadata emui-grid-vfill">
+	<p class="qm-title"></p>
+	<form>
+		<div id="courtesyMessage">This is a channel copy. Please, select
+			the main copy to edit metadata.</div>
+		<div id="objPanelContent">
+			<div class="tabbable">
+				<ul class="nav nav-tabs tab-sm">
+					<li class="active"><a href="#tabDigital-<%=uniqueMetadataId%>" data-toggle="tab">Digital</a></li>
+					<li><a href="#tabGeneral-<%=uniqueMetadataId%>" data-toggle="tab">General</a></li>
+				</ul>
+				<div class="tab-content">
+					<div id="tabDigital-<%=uniqueMetadataId%>" class="tab-pane active">
+						<div class="qmItem" id="sliceTempalteContainer">
+							<label>Slice Template:</label>
+							<select data-id="metadata > digitalPub > sliceTemplate" id="sliceTemplate" onchange="selectTemplate();">
+								<option value="">Default</option>
+								<option value="obituaries">Obituaries</option>
+								<option value="puffs">Puffs</option>
+							</select>
+						</div>
+						<div id="obituaries" style="display: none">
+							<label><bold><u>Obituaries</u></bold></label>
+							<div class="qmItem">
+								<label>Born </label>
+								<div id="orbbirthDatedivID" class="input-append date emui-field-enabled">
+									<input type="text" data-id="metadata > digitalPub > obits > birthdate" type="text" />
+									<span class="add-on" id="orbbirthdateDateButton">
+										<i data-time-icon="icon-time" data-date="icon-calendar" class="fa-calendar"></i>
+									</span>
+								</div>
+							</div>	
+							<div class="qmItem">
+								<label>Died </label>
+								<div id="orbbirthDatedivID" class="input-append date emui-field-enabled">
+									<input type="text" data-id="metadata > digitalPub > obits > deathdate" />
+									<span class="add-on" id="orbdeathdateDateButton">
+										<i data-time-icon="icon-time" data-date="icon-calendar" class="fa-calendar"></i>
+									</span>
+								</div>
+							</div>
+						</div>
+						<div id="puffs" style="display: none">
+							<label><bold><u>Puffs</u></bold></label>
+							<div class="qmItem" id="puffTopicId">
+								<label>Display Link Override:</label>
+								<input type="text" data-id="metadata > digitalPub > puffs > topic" id="puffTopic" />
+							</div>
+							<div class="qmItem" id="pufflinkId">
+								<label for="puffLink">Puff Link:</label>
+								<input id="puffLink" data-id="metadata > digitalPub > puffs > link" type="text" />
+							</div>
+							<div class="qmItem" id="puffSectionLinkId">
+								<label>Section Link:</label></td>
+								<select data-id="metadata > digitalPub > puffs > sectionLink" id="puffSectionLink" onchange="upDatepuffTopicId(this);">
+									<option value="">Please Select...</option>
+									<option value="1#section-news">News</option>
+									<option value="2#section-comment">Comment</option>
+									<option value="3#section-world">World</option>
+									<option value="4#section-business">Business</option>
+									<option value="5#section-law">Law</option>
+									<option value="6#section-sport">Sport</option>
+									<option value="7#section-register">Register</option>
+									<option value="8#section-scotland">Scotland</option>
+									<option value="9#section-ireland">Ireland</option>
+									<option value="10#section-puzzles">Puzzles</option>
+									<option value="11#section-times2">Times2</option>
+									<option value="12#section-theGame">The Game</option>
+									<option value="13#section-bricksMortar">Bricks &amp; Mortar</option>
+									<option value="14#section-saturdayReview">Saturday Review</option>
+									<option value="15#section-weekend">Weekend</option>
+									<option value="16#section-travel">Travel</option>
+									<option value="17#section-money">Money</option>
+									<option value="18#section-newsReview">News Review</option>
+									<option value="19#section-home">Home</option>
+									<option value="20#section-driving">Driving</option>
+									<option value="21#section-todays-magazines">Magazine</option>
+									<option value="22#section-todays-magazines">Style</option>
+									<option value="23#section-todays-magazines">Culture</option>
+									<option value="24#section-theDish">The Dish</option>
+									<option value="specialSectionLink">Special Section Link</option>
+									<option value="externalLink">External Link</option>
+								</select>
+							</div>
+							<div class="qmItem" id="colorPickerId">
+								<label>Bkg:</label>
+								<input id="colorPickermeta" type="hidden" data-id="metadata > digitalPub > puffs > backgroundColor" />
+								<input id="colorPicker" type="color" width="60px" onchange="updateColorpicker(this);"/>
+							</div>
+						</div>
+						<hr/>
+						<div class="qmItem" id="labelContainer">
+							<label for="Label">Label</label> <input class="Label"
+								data-id="metadata > digitalPub > label" type="text"
+								placeholder="Enter label here...." />
+						</div>
+						<div class="qmItem" id="flags">
+							<div class="accordion-heading">
+								<label>
+									<bold>Publication Info</bold><label>
+							</div>
+							<table>
+								<tr>
+									<td />
+									<td />
+									<td><label>Days:</label></td>
+									<td><label>Hours:</label></td>
+									<td><label>Minutes:</label></td>
+								</tr>
+								<tr>
+									<td class="col1">
+										<nobr>
+											<label class="checkbox" style="display: inline"> <input name="isNew"
+													value="{isNew}" id="newExp" type="checkbox"
+													data-id="metadata > digitalPub > flags > isNew"
+													onchange="updateNewExp(this)" />
+												<input name="newExpIp" value="{newExpIp}" id="isnewExp" type="hidden"
+													data-id="metadata > digitalPub > flags > newExp" />
+											</label><label>New</label>
+										</nobr>
+									</td>
+									<td class="col1"></td>
+									<td class="col"><input type="number" id="isNewDaysExp" name="isNewDaysExp" min="0"
+											max="1000" onchange="setnewExp()"></td>
+									<td class="col"><input type="number" id="isNewHoursExp" name="isNewHoursExp" min="0"
+											max="23" onchange="setnewExp()"></td>
+									<td class="col"><input type="number" id="isNewMinsExp" name="isNewMinsExp" min="0"
+											max="59" onchange="setnewExp()"></td>
+								</tr>
+								<tr>
+									<td class="col1">
+										<nobr>
+											<label class="checkbox" style="display: inline"> <input name="isUpdated"
+													value="{isUpdated}" id="updatedExp" type="checkbox"
+													data-id="metadata > digitalPub > flags > isUpdated"
+													onchange="updateUpdatedExp(this);" />
+												<input name="updatedIp" value="{UpdatedIp}" id="isUpdatedIp"
+													type="hidden"
+													data-id="metadata > digitalPub > flags > updatedExp" />
+
+											</label> <label>Updated</label>
+										</nobr>
+									</td>
+									<td class="col1"></td>
+									<td class="col"><input type="number" id="isUpdatedDaysExp" name="isUpdatedDaysExp"
+											min="0" max="1000" onchange="setupdatedIp()"></td>
+									<td class="col"><input type="number" id="isUpdatedHoursExp" name="isUpdatedHoursExp"
+											min="0" max="23" onchange="setupdatedIp()"></td>
+									<td class="col"><input type="number" id="isUpdatedMinsExp" name="isUpdatedMinsExp"
+											min="0" max="59" onchange="setupdatedIp()"></td>
+								</tr>
+								<tr>
+									<td class="col1">
+										<nobr>
+											<label class="checkbox" style="display: inline"> <input name="isExclusive"
+													value="{isExclusive}" id="exclusiveExp" type="checkbox"
+													data-id="metadata > digitalPub > flags > isExclusive"
+													onchange="updateExclusiveExp(this);" />
+												<input name="exclusiveIp" value="{exclusiveIp}" id="isexclusiveExp"
+													type="hidden"
+													data-id="metadata > digitalPub > flags > exclusiveExp" />
+											</label> <label>Exclusive</label>
+										</nobr>
+									</td>
+									<td class="col1"></td>
+									<td class="col"><input type="number" id="isExclusiveDaysExp"
+											name="isExclusiveDaysExp" min="0" max="1000" onchange="setexclusiveExp()">
+									</td>
+									<td class="col"><input type="number" id="isExclusiveHoursExp"
+											name="isExclusiveHoursExp" min="0" max="23" onchange="setexclusiveExp()">
+									</td>
+									<td class="col"><input type="number" id="isExclusiveMinsExp"
+											name="isExclusiveMinsExp" min="0" max="59" onchange="setexclusiveExp()">
+									</td>
+								</tr>
+								<tr>
+									<td class="col1">
+										<nobr>
+											<label class="checkbox" style="display: inline"> <input name="isSponsored"
+													value="{isSponsored}" id="sponsoredExp" type="checkbox"
+													data-id="metadata > digitalPub > flags > isSponsored"
+													onchange="updateSponsoredExp(this)" />
+												<input name="sponsoredExpIp" value="{sponsoredExpIp}"
+													id="issponsoredExp" type="hidden"
+													data-id="metadata > digitalPub > flags > sponsoredExp" />
+											</label><label>Sponsored</label>
+										</nobr>
+									</td>
+									<td class="col1"></td>
+									<td class="col"><input type="number" id="isSponsoredDaysExp"
+											name="isSponsoredDaysExp" min="0" max="1000" onchange="setSponsored()"></td>
+									<td class="col"><input type="number" id="isSponsoredHoursExp"
+											name="isSponsoredHoursExp" min="0" max="23" onchange="setSponsored()"></td>
+									<td class="col"><input type="number" id="isSponsoredMinsExp"
+											name="isSponsoredMinsExp" min="0" max="59" onchange="setSponsored()"></td>
+								</tr>
+							</table>
+						</div>
+						<hr />
+						<label>
+							<bold><u>Enable:</u></bold>
+						</label>
+						<div class="qmItem" id="commentingItem">
+							<label style="width:95px">Comments</label>
+							<div class="checkbox-content">
+								<label class="checkbox"> <input id="commenting"
+										data-id="metadata > digitalPub > enable > commenting" type="checkbox">
+								</label>
+							</div>
+
+							<label style="width:85px;padding-left:15px">Sharing</label>
+							<div class="checkbox-content">
+								<label class="checkbox"> <input id="sharing"
+										data-id="metadata > digitalPub > enable > sharing" type="checkbox">
+								</label>
+							</div>
+
+							<label style="width:85px;padding-left:15px">Saving</label>
+							<div class="checkbox-content">
+								<label class="checkbox"> <input id="saving"
+										data-id="metadata > digitalPub > enable > saving" type="checkbox">
+								</label>
+							</div>
+						</div>
+						<label><bold><u>Disable:</u></bold></label>
+
+						<div class="qmItem" id="DropCapItem">
+							<label style="width:95px">DropCap</label>
+							<div class="checkbox-content">	
+								<label class="checkbox"> 
+								<input id="dropcap"  data-id="metadata > digitalPub > disable > dropcap" type="checkbox"/>
+								</label>
+							</div>	
+						</div>
+						<hr />
+						<label><bold><u>Comments Moderation</u></bold></label><br/>
+						<div class="qmItem" id="commentsmoderationItem">
+								<table>
+									<tr>
+										<td><label>Post</label></td>
+										<td>
+											<input name="postcm" id="post-comments-moderation" type="radio" 
+											 onchange="commentsPostSave()"/>
+											<input name="premoderation_hid_name" value=""
+													id="premoderation_hid" type="hidden"
+													data-id="metadata > digitalPub > enable > premoderation" />
+										</td>	
+										<td><label>Pre</label></td>
+										<td>
+											<input name="precm" id="pre-comments-moderation" type="radio"  
+											onchange="commentsPreSave()"/>
+										</td>
+									</tr>
+								</table>			
+						</div>	
+						<hr/>
+						<div class="qmItem" id="digital_pubDateDiv">
+							<label>Article Timestamp</label>
+							<div id="digital_pubDateDivID" class="input-append date emui-field-enabled">
+								<input id="digital_pubDate" data-id="metadata > digitalPub > digitalPubDate"
+									type="text"></input>
+								<span class="add-on" id="digital_pubDate_span">
+									<i data-time-icon="icon-time" data-date-icon="icon-calendar"
+										class="fa fa-calendar"></i>
+								</span>
+							</div>
+						</div>
+						<div class="qmItem" id="digital_expDateDiv">
+							<label> Set Expiration Date<br/>
+								<a title="Remove article now" href="javascript:generateexpiredate('digital_expires');">Remove article now</a>
+							</label>
+							<div id="digital_expiresDivID" class="input-append date emui-field-enabled">
+								<input class="expires" type="text" data-id="metadata > digitalPub > expires"
+									id="digital_expires" />
+								<span class="add-on" id="digital_expires_span">
+									<i data-time-icon="icon-time" data-date-icon="icon-calendar" class="fa fa-calendar"></i>
+								</span>
+							</div>
+						</div>
+						<hr />
+						<div class="qmItem" id="articleTemplateDiv">
+							<label>Article Template</label>
+							<select data-id="metadata > digitalPub > template" id="articleTemplate" class="form-control"
+								onchange="updateArticleThemeUI();">
+								<option value="default">Default</option>
+								<option value="major-default">Major</option>
+								<option value="opinion-default">Comment</option>
+								<option value="supplement-default">Magazine Default</option>
+								<option value="supplement-columnist">Magazine Columnist</option>
+								<option value="supplement-in-depth">Magazine In Depth</option>
+							</select>
+						</div>
+						<div class="qmItem" id="articleThemeDiv">
+							<label for="theme" class="articleTheme">Article Theme</label>
+							<select data-id="metadata > digitalPub > theme" id="articleTheme"
+								class="articleTheme"></select>
+						</div>
+						<hr />
+						<label><bold><u>Commercial</u></bold></label>
+						<div class="qmItem" id="commercialSecDiv">
+						
+							<label for="commercialSection">Ad Section</label>
+							<input id="commercialSection" type="text" data-id="metadata > digitalPub > commercialSection" />
+						</div>
+						<div class="qmItem" id="commercialTagDiv">
+							<label for="commercialTags">Ad Tags</label>
+							<input id="commercialTags" type="text" data-id="metadata > digitalPub > commercialTags" />
+						</div>
+
+						<hr/>
+
+						<div class="qmItem" id="friendlyUrlDiv">
+							<label><a title="Generate a slug from the headline"
+									href="javascript:generateSlug();">Generate
+									Friendly url
+								</a></label>
+							<input class="friendlyUrl" type="text" data-id="metadata > digitalPub > friendlyUrl"
+								id="friendlyUrl" />
+						</div>
+						
+
+						<div class="qmItem" id="canonicalLinkDiv">
+							<label><a title="Check Canonical Link for Syndication" class="friendlyUrllabel"
+									href="javascript:checkCanonicalLink();">Check Link for Syndication </a> </label>
+							<input class="canonicalLink" type="text" name="metadata > digitalPub > canonicalLink"
+								id="canonicalLink" />
+						</div>
+
+					</div>
+					<div id="tabGeneral-<%=uniqueMetadataId%>" class="tab-pane">
+						<div class="prop-accordion">
+							<div class="accordion-heading">
+								<label>
+									<bold>Properties:</bold><label>
+							</div>
+							<div class="qmItem" id="info">
+								<table>
+									<tr>
+										<td>Created:</td>
+										<td id="creator-content"></td>
+									</tr>
+									<tr>
+										<td>Modified:</td>
+										<td id="modifier-content"></td>
+									</tr>
+									<tr>
+										<td>Status:</td>
+										<td id="status-content"></td>
+									</tr>
+									<tr>
+										<td>Article Type:</td>
+										<td id="article-type"></td>
+									</tr>
+								</table>
+							</div>
+						</div>
+						<br>
+						<div class="rights-accordion">
+							<div class="accordion-heading">
+								<label>
+									<bold>Rights:</bold><label>
+							</div>
+							<div class="qmItem" id="doNotArchive">
+								<label>Do Not Archive</label>
+								<div class="checkbox-content">
+									<label class="checkbox"> <input id="doNotArchiveCheckBox"
+											data-id="metadata > rights > doNotArchive" type="checkbox">
+									</label>
+								</div>
+							</div>
+							<div class="qmItem" id="doNotExport">
+								<label> Do not Export </label>
+								<div class="checkbox-content">
+									<label class="checkbox"> <input id="doNotExportCheckBox"
+											data-id="metadata > rights > doNotExport" type="checkbox">
+									</label>
+								</div>
+							</div>
+							<div class="qmItem" id="doNotMove">
+								<label>Do not Move</label>
+								<div class="checkbox-content">
+									<label class="checkbox"> <input id="doNotMoveCheckBox"
+											data-id="metadata > rights > doNotMove" type="checkbox">
+									</label>
+								</div>
+							</div>
+							<div class="qmItem" id="doNotsyndicate">
+								<label>Do Not Syndicate</label>
+								<div class="checkbox-content">
+									<label class="checkbox"> <input name="embargo_date" value="{embargo_date}"
+											id="doNotsyndicateCheckBox" data-id="metadata > rights > Newsservice"
+											type="checkbox" onchange="stickyheaddsadaer(this)">
+									</label>
+								</div>
+							</div>
+							<div class="qmItem" id="Syndicationembargo">
+								<label>Syndication Embargo</label>
+								<div id="SyndicationembargoDateID" class="input-append date emui-field-enabled">
+									<input id="SyndicationembargoDate" data-id="metadata > syndPub > syndEmbargo"
+										type="text"></input>
+									<span class="add-on" id="SyndicationembargoDateButton">
+										<i data-time-icon="icon-time" data-date-icon="icon-calendar"
+											class="fa fa-calendar"></i>
+									</span>
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</form>
+	<div id="footerButtons" class="em-metadata-footer">
+		<button class="em-metadata-save  btn btn-sm btn-primary pull-right" id="save-button">Save</button>
+		<button class="em-metadata-reset btn btn-sm btn-default pull-right m-r-5">Reset</button>
+		<!-- <button class="em-metadata-clean btn btn-sm btn-default pull-left  m-r-5">Clean</button> -->
+	</div>
+</div>

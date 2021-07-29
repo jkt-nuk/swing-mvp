@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE config [
+    <!ENTITY % EOMVAR SYSTEM "file:../cfg/eomvar.dtd">
+    %EOMVAR;
+    <!ENTITY SERVLET_NAME "mras">
+]>
+<config>
+  <restapi 
+    notation="NATURAL" 
+    sessionMapping="NATURAL">
+
+    <scriptEngine 
+      engineName="JavaScript" 
+      env="WebClientCtx/eweb/js/json/json.js" />
+
+    <upload uploadDir="&HOME;/work/methode-servlets/swing/&SERVLET_NAME;/uploadDir" 
+      maxDeferredConcurrentUploads="20" 
+      maxUploadLifeHours="2" 
+      uploadExecutedLifeSeconds="600" />
+
+    <primeServerMQConfig
+      enabled="false" 
+      address="&ACTIVEMQ_PROTO;://0.0.0.0:61616" 
+      messageTimeOut="2" />
+    <primeServiceConfig
+      enabled="false"
+      address="&HTTP_PROTO;://&SERVER_TOMCAT_TOOLS;:&TOMCAT_TOOLS_PORT;/primeserverweb" />
+    <endpoints>
+      <endpoint 
+        id="spellchecker" 
+        target="http://&SERVER_SPELLCHECKER;:&SPELLCHECKER_PORT;/rest/" 
+        sendAuthInfo="true" />
+    </endpoints>
+
+    <caches>
+      <rowDataCache 
+        enable="true" 
+        maxSize="1000" />
+      <catalogSetCache 
+        enable="true" 
+        maxSize="15" />
+    </caches>
+
+
+    <cas enable="False"
+         serverName="&LB_MRAS_CORE_URL;"
+         proxyCallbackUrl="&HTTP_PROTO;://&SERVER_SWING;:&NGINX_PORT;/swing/api/rest/proxyCallback"
+         serverUrlPrefix="&LB_SSO_URL;"
+         acceptAnyProxy="true" useSession="false" redirectAfterValidation="false" />
+
+    <login 
+      checkApplicationId="false" 
+      checkPrivileges="false" 
+      checkSecureAuthKey="false" 
+      defaultDatabase="&BACKEND_ENV1;"
+      maxIdleInMinutes="5">
+
+      <captcha enabled="false"
+          maxAttempts="3" maxBannedMapSize="1000"
+          awaitTimeWhenBannedMapFull="10" awaitTimeUnitWhenBannedMapFull="MINUTES"
+          expirationTime="10" expirationTimeUnit="HOURS">
+      </captcha>
+
+      <databases>
+        <database
+          id="&BACKEND_ENV1;" 
+          name="&BACKEND_ENV1;" 
+          description="&BACKEND_DESC_ENV1;"
+          username="&METHUSR;" password="&METHPWD;" 
+          groups="" groupsBehaviourDeny="true"
+          maxSessionPool="50" >
+
+
+          <repositories>
+            <repository 
+              nameServiceAddress="corbaloc:&IIOP_PROTO;:1.2@&SERVER_NS_ENV1;:&NS_PORT_ENV1;/NameService"
+              name="&REPOSITORY_ENV1_NAME1;" 
+              repositoryBindingPath="EOM/Repositories/&REPOSITORY_ENV1_NAME1;"
+              notificationChannelBindingPath="EOM/Notifiers/&NOTIFIER_ENV1;" />
+            <repository 
+              nameServiceAddress="corbaloc:&IIOP_PROTO;:1.2@&SERVER_NS_ENV1;:&NS_PORT_ENV1;/NameService"
+              name="&REPOSITORY_ENV1_NAME2;" 
+              repositoryBindingPath="EOM/Repositories/&REPOSITORY_ENV1_NAME2;"
+              notificationChannelBindingPath="EOM/Notifiers/&NOTIFIER_ENV1;" />
+            <repository 
+              nameServiceAddress="corbaloc:&IIOP_PROTO;:1.2@&SERVER_NS_ENV1;:&NS_PORT_ENV1;/NameService"
+              name="&REPOSITORY_ENV1_NAME3;" 
+              repositoryBindingPath="EOM/Repositories/&REPOSITORY_ENV1_NAME3;"
+              notificationChannelBindingPath="EOM/Notifiers/&NOTIFIER_ENV1;" />
+          </repositories>
+        </database>
+      </databases>
+    </login>
+
+    <i18n 
+      enableCache="true" 
+      labelsFile="labels.properties" 
+      locale="en:US" 
+      datePattern="dd/MM/yyyy" />
+
+    <distributedCache enableClientServerMode="&SWING_HAZELCAST_CLIENT;" groupName="&SWING_HAZELCAST_GROUPNAME;" />
+  </restapi>
+</config>

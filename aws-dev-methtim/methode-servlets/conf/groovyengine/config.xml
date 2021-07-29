@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE config [
+    <!ENTITY % EOMVAR SYSTEM "../../../cfg/eomvar.dtd">
+    %EOMVAR;
+
+    <!ENTITY SERVLET_NAME "groovyengine">
+    <!ENTITY SERVLET_USR "&METHUSR_groovyengine;">
+    <!ENTITY SERVLET_PWD "&METHPWD_groovyengine;">
+]>
+<config>
+    <scripts>
+        <script> 
+          <alias>exportOnSave</alias>
+	  <path>&HOME;/methode-servlets/conf/&SERVLET_NAME;/scripts/exportOnSave.groovy</path>
+          <params>
+          	<param key="env" value="&METHENV;" />
+	  </params>
+          <properties>
+          	<property key="allowImpersonation" value="false" />
+                <property key="allowImpersonationAsAdmin" value="true" />
+                <property key="allowSystemSession" value="true" />
+                <property key="repositories" value="&REPOSITORY1;" />
+          </properties>
+      </script>
+   </scripts>
+   <repositories>
+        <repository alias="&REPOSITORY_ALIAS;"
+                    user="&SERVLET_USR;"
+                    password="&SERVLET_PWD;"
+                    repositoryBindingPath="EOM/Repositories/&REPOSITORY1;"
+                    nameService="corbaloc:&IIOP_PROTO;:&SERVER_NS;:&NS_PORT;/NameService"
+                    sessionPoolParams="0 10 300 15" />
+        <!-- ... -->
+    </repositories>
+</config>
